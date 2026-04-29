@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class BlockingQueue {
     private final Queue<Runnable> queue = new LinkedList<>();
-    private final Object monitor = new Object(); // наш монитор
+    private final Object monitor = new Object(); // наш монитор.
 
     // добавляет элемент в очередь
     public void add(Runnable task){
