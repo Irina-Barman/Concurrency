@@ -12,12 +12,20 @@ public class BlockingQueue {
     public void add(Runnable task){
         synchronized (monitor) {
             queue.add(task);
+            monitor.notify();
         }
     }
 
     // Забирает элемент из очереди
     public Runnable take() {
         synchronized (monitor) {
+            try {
+                while (queue.isEmpty()) {// до тех пор, пока очередь пуста
+                    monitor.wait();
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             return queue.poll();
         }
     }

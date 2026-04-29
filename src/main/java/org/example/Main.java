@@ -23,6 +23,11 @@ public class Main {
 
         for (int i = 0; i < 10; i++) {
             final int index = i;
+            try {
+                Thread.sleep(1000); // Задержка для наглядности спящего режима.
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             blockingQueue.add(new Runnable() {
                 @Override
                 public void run() {
