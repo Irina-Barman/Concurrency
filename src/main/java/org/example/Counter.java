@@ -11,7 +11,7 @@ public class Counter {
     }
 
     public void dec() {
-        value.getAndDecrement(); // получить и уменьшить
+        value.getAndDecrement(); // получить и уменьшить.
     }
 
     public int getValue() {
