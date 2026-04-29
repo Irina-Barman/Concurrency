@@ -6,11 +6,11 @@ import java.util.concurrent.BlockingQueue;
 public class Main {
 
     public static void main(String[] args) {
-        BlockingQueue<Runnable> blockingQueue= new LinkedBlockingQueue<>(); //интерфейс BlockingQueue, параметризирован типом Runnable
+        BlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>(); //интерфейс BlockingQueue, параметризирован типом Runnable
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int counter =0;
+                int counter = 0;
                 while (true) {
                     System.out.println("Counter: " + counter);
                     counter++;
@@ -21,14 +21,15 @@ public class Main {
                     }
                     new Thread(task).start();
                     /*
+
                     метод take никогда не вернёт null , убираем проверку
                     if(task != null){
 
                      */
-                        new Thread(task).start();
-                    }
-
+                    new Thread(task).start();
                 }
+
+            }
         }).start();
 
         for (int i = 0; i < 10; i++) {
