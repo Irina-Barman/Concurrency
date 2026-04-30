@@ -6,52 +6,21 @@ import java.util.concurrent.BlockingQueue;
 public class Main {
 
     public static void main(String[] args) {
-        BlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>(); //интерфейс BlockingQueue, параметризирован типом Runnable
+        Account account = new Account(1000,1000);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int counter = 0;
-                while (true) {
-                    System.out.println("Counter: " + counter);
-                    counter++;
-                    Runnable task = null;
-                    try {
-                        task = blockingQueue.take();
-                    } catch (Exception e) {
-                    }
-                    new Thread(task).start();
-                    /*
-
-                    метод take никогда не вернёт null , убираем проверку
-                    if(task != null){
-
-                     */
-                    new Thread(task).start();
-                }
-
+                account.transferFrom1To2(300);
             }
         }).start();
 
-        for (int i = 0; i < 10; i++) {
-            final int index = i;
-            try {
-                Thread.sleep(1000); // Задержка для наглядности спящего режима.
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                account.transferFrom2To1(500);
             }
-            blockingQueue.add(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.println("---" + index);
-                }
-            });
-        }
-
+        }).start();
 
     }
 }
