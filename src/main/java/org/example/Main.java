@@ -12,7 +12,9 @@ public class Main {
         Создаем 10 потоков, которые выполняют своих задачи,
         а потом начинают работу с файловой системой.
          */
-        ExecutorService executorService = Executors.newFixedThreadPool(3); // создадим пул на 3 потока
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        Semaphore semaphore = new Semaphore(3); // кол-во потоков, которые допускаем к ресурсу
+
         for (int i = 0; i < 10; i++) {
             executorService.execute(new Runnable() { // передаём задачи в пулл
                 @Override
@@ -24,14 +26,21 @@ public class Main {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    workWithFileSystem();
+                    try {
+                        semaphore.acquire(); // уменьшит счётчик потоков на 1
+                        workWithFileSystem(); // запустит работу с файловой системой
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } finally { // чтобы блок выполнился в любом случае
+                        semaphore.release(); // увеличит счётчик
+                    }
                     System.out.println(name + " - finished working.");
                 }
 
             });
 
         }
-        executorService.shutdown();
+        executorService.shutdown(); // остановили ожидание задач
     }
 
     private static void workWithFileSystem(){
